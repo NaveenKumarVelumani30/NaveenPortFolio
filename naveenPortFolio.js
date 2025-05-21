@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => {
-                showPopup('Failed to send message. Please try again later.', false);
+               // showPopup('Failed to send message. Please try again later.', false);
                 console.error('Error:', error);
             })
             .finally(() => {
