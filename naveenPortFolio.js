@@ -1,10 +1,78 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Portfolio website loaded');
-});
 
-document.addEventListener('DOMContentLoaded', function() {
+    const popup = document.createElement('div');
+    popup.id = 'custom-popup';
+    popup.style.position = 'fixed';
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+    popup.style.padding = '20px 30px';
+    popup.style.backgroundColor = '#fff';
+    popup.style.borderRadius = '8px';
+    popup.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+    popup.style.zIndex = '10000';
+    popup.style.display = 'none';
+    popup.style.maxWidth = '80%';
+    popup.style.textAlign = 'center';
+    
+    const popupMessage = document.createElement('p');
+    popupMessage.style.marginBottom = '20px';
+    
+    const popupButton = document.createElement('button');
+    popupButton.textContent = 'OK';
+    popupButton.style.padding = '8px 20px';
+    popupButton.style.backgroundColor = '#2563eb';
+    popupButton.style.color = 'white';
+    popupButton.style.border = 'none';
+    popupButton.style.borderRadius = '4px';
+    popupButton.style.cursor = 'pointer';
+    popupButton.style.transition = 'background-color 0.3s';
+    
+    popupButton.addEventListener('mouseover', function() {
+        popupButton.style.backgroundColor = '#1e3a8a';
+    });
+    
+    popupButton.addEventListener('mouseout', function() {
+        popupButton.style.backgroundColor = '#2563eb';
+    });
+    
+    popup.appendChild(popupMessage);
+    popup.appendChild(popupButton);
+    document.body.appendChild(popup);
+    
+    // Function to show popup
+    function showPopup(message, isSuccess) {
+        popupMessage.textContent = message;
+        popup.style.display = 'block';
+        popup.style.backgroundColor = isSuccess ? '#f0fff0' : '#fff0f0';
+        popupMessage.style.color = isSuccess ? '#2e7d32' : '#c62828';
+        
+        // Add overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'popup-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+        overlay.style.zIndex = '9999';
+        document.body.appendChild(overlay);
+    }
+    
+    // Close popup function
+    function closePopup() {
+        popup.style.display = 'none';
+        const overlay = document.getElementById('popup-overlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+    
+    popupButton.addEventListener('click', closePopup);
+
     const contactForm = document.getElementById('contactForm');
-    const responseDiv = document.getElementById('formResponse');
     
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
@@ -45,14 +113,15 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 if (data.success || data.message) {
-                    showResponse(data.message || 'Message sent successfully!', 'success');
+                    showPopup(data.message || 'Message sent successfully!', true);
+                    // Clear form fields
                     contactForm.reset();
                 } else {
                     throw new Error(data.error || 'Failed to send message');
                 }
             })
             .catch(error => {
-                showResponse('Failed to send message. Please try again later.', 'error');
+                showPopup('Failed to send message. Please try again later.', false);
                 console.error('Error:', error);
             })
             .finally(() => {
@@ -129,17 +198,5 @@ document.addEventListener('DOMContentLoaded', function() {
     function clearErrors() {
         const errorMessages = document.querySelectorAll('.error-message');
         errorMessages.forEach(msg => msg.remove());
-    }
-    
-    function showResponse(message, type) {
-        if (!responseDiv) return;
-        
-        responseDiv.textContent = message;
-        responseDiv.style.color = type === 'success' ? 'green' : 'red';
-        responseDiv.style.marginTop = '10px';
-        
-        setTimeout(() => {
-            responseDiv.textContent = '';
-        }, 5000);
     }
 });
