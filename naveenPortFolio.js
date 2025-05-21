@@ -44,8 +44,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
-                showResponse('Message sent successfully!', 'success');
-                contactForm.reset();
+                if (data.success || data.message) {
+                    showResponse(data.message || 'Message sent successfully!', 'success');
+                    contactForm.reset();
+                } else {
+                    throw new Error(data.error || 'Failed to send message');
+                }
             })
             .catch(error => {
                 showResponse('Failed to send message. Please try again later.', 'error');

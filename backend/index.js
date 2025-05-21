@@ -37,7 +37,7 @@ app.post('/send-email', (req, res) => {
         from: email,        
         to: 'naveenkumaroct8@gmail.com', 
         subject: `New message from ${name} (via Website Form)`,
-        text: `Name: ${name}\nEmail: ${email}\n Subject: ${subject}\nMessage: ${message}`
+        text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
