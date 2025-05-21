@@ -870,3 +870,22 @@ footer {
         flex-direction: column;
     }
 }
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.form-response {
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+input:invalid, textarea:invalid {
+    border-color: #ff4444;
+}
+
+input:valid, textarea:valid {
+    border-color: #00C851;
+}

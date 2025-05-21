@@ -1,8 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
+const cors = require('cors'); 
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors()); 
+
+// Alternatively, you can configure CORS with specific options:
+/*
+app.use(cors({
+    origin: 'https://yourfrontenddomain.com', // or '*' to allow all
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type']
+}));
+*/
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -15,19 +28,18 @@ app.post('/send-email', (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'naveenkumaroct8@gmail.com', // Your Gmail
-            pass: 'hmzz gkfc ujnb syoe'   // App Password (not regular password)
+            user: 'naveenkumaroct8@gmail.com', 
+            pass: 'hmzz gkfc ujnb syoe'   
         }
     });
 
     const mailOptions = {
         from: email,        
-        to: 'naveenkumaroct8@gmail.com', // Your email (receiver)
+        to: 'naveenkumaroct8@gmail.com', 
         subject: `New message from ${name} (via Website Form)`,
         text: `Name: ${name}\nEmail: ${email}\n Subject: ${subject}\nMessage: ${message}`
     };
 
-    // Send email
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error(error);
